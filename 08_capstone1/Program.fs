@@ -1,5 +1,6 @@
 ﻿// Learn more about F# at http://fsharp.org
 
+open Car
 open System
 
 let getDestination() =
