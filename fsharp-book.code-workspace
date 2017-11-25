@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "02_Hello_world"
+		},
+		{
+			"path": "08_capstone1"
 		}
 	],
 	"settings": {}
