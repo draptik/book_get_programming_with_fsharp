@@ -1,3 +1,5 @@
+open System
+
 // Gets the distance to a given destination
 let getDistance (destination) =
     if destination = "Gas" then 10
@@ -14,5 +16,15 @@ let calculateRemainingPetrol(currentPetrol:int, distance:int) : int =
 
 calculateRemainingPetrol(1,1) = 0
 calculateRemainingPetrol(10,5) = 5
-//calculateRemainingPetrol(1,2) = 0
+//calculateRemainingPetrol(1,2) = 0 // should throw
+
+let distanceToGas = getDistance("Gas")
+calculateRemainingPetrol(25, distanceToGas) = 15
+// calculateRemainingPetrol(5, distanceToGas) = 99 // should throw
+
+let driveTo(petrol: int, destination: string) : int =
+    let distance = getDistance(destination)
+    calculateRemainingPetrol(petrol, distance)
+
+driveTo(50, "Home") = 25
 
