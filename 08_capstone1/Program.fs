@@ -2,7 +2,19 @@
 
 open System
 
+let getDestination() =
+    Console.Write("Enter destination: ")
+    Console.ReadLine()
+
+let mutable petrol = 100
+
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
-    0 // return an integer exit code
+    while true do
+        try
+            let destination = getDestination()
+            printfn "Trying to drive to %s" destination
+            petrol <- driveTo(petrol, destination)
+            printfn "Made it to %s! You have %d petrol left" destination petrol
+        with ex -> printfn "ERROR: %s" ex.Message
+    0
