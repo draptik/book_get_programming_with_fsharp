@@ -24,7 +24,9 @@ calculateRemainingPetrol(25, distanceToGas) = 15
 
 let driveTo(petrol: int, destination: string) : int =
     let distance = getDistance(destination)
-    calculateRemainingPetrol(petrol, distance)
+    let remainingPetrol = calculateRemainingPetrol(petrol, distance)
+    if destination = "Gas" then remainingPetrol + 50
+    else remainingPetrol
 
 driveTo(50, "Home") = 25
-
+driveTo(50, "Gas") = 90
