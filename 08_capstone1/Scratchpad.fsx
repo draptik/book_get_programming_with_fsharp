@@ -31,3 +31,5 @@ driveTo(50, "Gas") = 90
 
 let a = driveTo(100, "Office")
 let b = driveTo(a, "Stadium")
+let c = driveTo(b, "Gas")
+let answer = driveTo(c, "Home") 
