@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/netcoreapp2.0/fsharp-hwapp.dll",
+            "program": "${workspaceRoot}/bin/Debug/netcoreapp2.0/02_Hello_world.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
