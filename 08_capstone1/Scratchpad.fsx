@@ -7,3 +7,12 @@ let getDistance (destination) =
 
 getDistance("Home") = 25
 getDistance("Stadium") = 25
+
+let calculateRemainingPetrol(currentPetrol:int, distance:int) : int =
+    if currentPetrol >= distance then currentPetrol - distance
+    else failwith "Ooops! You've run out of petrol!"
+
+calculateRemainingPetrol(1,1) = 0
+calculateRemainingPetrol(10,5) = 5
+//calculateRemainingPetrol(1,2) = 0
+
