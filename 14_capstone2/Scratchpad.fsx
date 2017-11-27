@@ -10,10 +10,10 @@ type Account =
       Owner: Customer }
     
 /// Deposits an amount into an account
-let deposit (amount:decimal) (account:Account) : Account =
+let deposit (amount: decimal) (account: Account) : Account =
     { account with Balance = account.Balance + amount } 
 
-let withdraw (amount:decimal) (account:Account) : Account =
+let withdraw (amount: decimal) (account: Account) : Account =
     if amount > account.Balance then account
     else {  account with Balance = account.Balance - amount } 
 
@@ -47,7 +47,24 @@ let fileSystemAudit (account: Account) (message: string) =
 // Test
 fileSystemAudit bobsAccount "foo"
 
-let console account message =
+let console (account: Account) (message: string) =
     printfn "Account %O: %s" account.AccountId message
 
+// Test
 console bobsAccount "foo"    
+
+let auditAs operationName audit operation amount account =
+    audit account  (sprintf "%O: Perfoming a %s operation for %MEUR..." DateTime.UtcNow operationName amount)
+    let updatedAccount = operation amount account
+    let accountIsUnchanged = (updatedAccount = account)
+    if accountIsUnchanged then audit account (sprintf "%O: Transaction rejected!" DateTime.UtcNow)
+    else audit account (sprintf "%O: Transaction accepted! Balance is now %MEUR." DateTime.UtcNow updatedAccount.Balance)
+    updatedAccount
+
+let withdrawWithConsoleAudit = auditAs "withdraw" console withdraw
+let depositWithConsoleAudit = auditAs "deposit" console deposit
+
+bobsAccount
+|> depositWithConsoleAudit 1000M
+|> withdrawWithConsoleAudit 50M
+
