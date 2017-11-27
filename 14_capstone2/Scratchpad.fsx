@@ -10,7 +10,11 @@ type Account =
     
 /// Deposits an amount into an account
 let deposit (amount:decimal) (account:Account) : Account =
-    { AccountId = Guid.Empty; Owner = { Name = "Sam" }; Balance = 10M } 
+    { account with Balance = account.Balance + amount } 
+
+let withdraw (amount:decimal) (account:Account) : Account =
+    if amount > account.Balance then account
+    else {  account with Balance = account.Balance - amount } 
 
 let bob = { Name = "Bob" }    
 let bobsId = Guid.NewGuid()
@@ -19,3 +23,10 @@ let bobsAccount =
     { Balance = 0M
       AccountId = bobsId
       Owner = bob }
+
+bobsAccount 
+|> deposit 10M
+|> deposit 20M
+|> withdraw 2M
+|> withdraw 2000M
+// should return 28
