@@ -21,3 +21,7 @@ dotnet build
 ```
 dotnet run
 ```
+
+# Main lesson learned
+
+Partially applying a curried function. See `auditAs` function in `Operation.fs`.
