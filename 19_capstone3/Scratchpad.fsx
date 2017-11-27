@@ -9,7 +9,9 @@ let isValidCommand command =
     let validCommands = ['d'; 'w'; 'x']
     validCommands |> Seq.contains command
 
-
+let isStopCommand command =
+    'x' = command
+    
 let account =
     let commands = [ 'd'; 'w'; 'z'; 'f'; 'd'; 'x'; 'w' ]
 
