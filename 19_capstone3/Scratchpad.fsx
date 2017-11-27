@@ -11,7 +11,14 @@ let isValidCommand command =
 
 let isStopCommand command =
     'x' = command
-    
+
+let getAmount command amount =
+    let validAmount = Decimal.Parse amount
+    (command, validAmount)
+
+// let processCommand account commandAmountTuple =
+//     // TODO
+
 let account =
     let commands = [ 'd'; 'w'; 'z'; 'f'; 'd'; 'x'; 'w' ]
 
