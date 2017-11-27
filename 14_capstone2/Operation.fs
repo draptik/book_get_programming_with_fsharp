@@ -3,10 +3,10 @@ module Capstone2.Operations
 open System
 open Capstone2.Domain
 
-let deposit (amount: decimal) (account: Account) : Account =
+let deposit amount account =
     { account with Balance = account.Balance + amount } 
 
-let withdraw (amount: decimal) (account: Account) : Account =
+let withdraw amount account =
     if amount > account.Balance then account
     else {  account with Balance = account.Balance - amount } 
 
