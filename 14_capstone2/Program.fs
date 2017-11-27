@@ -2,7 +2,7 @@
 
 open System
 open Capstone2.Domain
-open Operations
+open Capstone2.Operations
 
 [<EntryPoint>]
 let main argv =
