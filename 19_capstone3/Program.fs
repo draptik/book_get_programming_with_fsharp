@@ -1,4 +1,4 @@
-﻿// Learn more about F# at http://fsharp.org
+﻿module Capstone3.Program
 
 open System
 open Capstone3.Domain
@@ -22,12 +22,15 @@ let processCommand (account:Account) (command:char, amount:decimal) =
     | 'w' -> withdraw amount account
     | _ -> account
 
-let openingAccount =
-        { Owner = { Name = "Isaac" }; Balance = 0M; AccountId = Guid.Empty }
 
 [<EntryPoint>]
 let main argv =
 
+    let openingAccount =
+        Console.Write "Please enter your name: "
+        let name = Console.ReadLine()
+        { Owner = { Name = name }; Balance = 0M; AccountId = Guid.Empty }
+    
     let consoleCommands = seq {
         while true do
             Console.Write "\n(d)eposit, (w)ithdraw or e(x)it: "
