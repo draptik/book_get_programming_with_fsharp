@@ -1,8 +1,12 @@
+open Capstone3.FileRepository
 #load "Domain.fs"
 #load "Operations.fs"
+#load "FileRepository.fs"
 open Capstone3.Domain
 open Capstone3.Operations
+open Capstone3.FileRepository
 open System
+open System.IO
 
 let openingAccount =
         { Owner = { Name = "Isaac" }; Balance = 0M; AccountId = Guid.Empty }
@@ -60,3 +64,21 @@ let transactions =
     ]
 loadAccount { Name = "Patrick" } Guid.Empty transactions
 
+let accountsPath =
+    let path = @"19_capstone3/logging"
+    Directory.CreateDirectory path |> ignore
+    path
+
+let findAccountFolder owner =
+    let folders = Directory.EnumerateDirectories(accountsPath, sprintf "%s" owner)    
+    printfn "%A" folders
+    if Seq.isEmpty folders then ""
+    else
+        let folder = Seq.head folders
+        DirectoryInfo(folder).Name
+findAccountFolder "Patrick"
+
+let findTransactionsOnDisk owner =
+    let accountFolder = Capstone3.FileRepository.findAccountFolder owner
+    printfn "AccountFolder : %s" accountFolder
+findTransactionsOnDisk "Patrick"

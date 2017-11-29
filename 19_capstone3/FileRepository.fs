@@ -6,12 +6,13 @@ open System.IO
 open System
 
 let private accountsPath =
-    let path = @"accounts"
+    let path = @"logging"
     Directory.CreateDirectory path |> ignore
     path
 
-let private findAccountFolder owner =
+let findAccountFolder owner =
     let folders = Directory.EnumerateDirectories(accountsPath, sprintf "%s_" owner)    
+    printfn "%A" folders
     if Seq.isEmpty folders then ""
     else
         let folder = Seq.head folders
