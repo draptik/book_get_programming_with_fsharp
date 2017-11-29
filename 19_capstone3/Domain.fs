@@ -27,9 +27,8 @@ module Transactions =
 
     let deserialize (fileContent:string) =
         let parts = fileContent.Split([|"***"|], StringSplitOptions.None)
-        {
-            Timestamp = DateTime.Parse parts.[0]
+        {   Timestamp = DateTime.Parse parts.[0]
             Operation = parts.[1]
             Amount = Decimal.Parse parts.[2]
-            Accepted = Boolean.Parse parts.[3]
-        }
+            Accepted = Boolean.Parse parts.[3] }
+            
