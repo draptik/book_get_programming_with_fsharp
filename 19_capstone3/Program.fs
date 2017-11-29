@@ -27,12 +27,20 @@ let openingAccount =
 
 [<EntryPoint>]
 let main argv =
-    let commands = [ 'd'; 'w'; 'z'; 'f'; 'd'; 'x'; 'w' ]
+
+    let consoleCommands = seq {
+        while true do
+            Console.Write "\n(d)eposit, (w)ithdraw or e(x)it: "
+            yield Console.ReadKey().KeyChar
+    }
+
     let closingAccount =
-        commands
+        consoleCommands
         |> Seq.filter isValidCommand
         |> Seq.takeWhile (not << isStopCommand)
         |> Seq.map getAmount
         |> Seq.fold processCommand openingAccount
-    printfn "%A" closingAccount
+
+    printfn "\n\nClosing account: \n\n%A" closingAccount
+
     0 // return an integer exit code
