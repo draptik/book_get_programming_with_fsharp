@@ -16,8 +16,8 @@ let getAmountConsole (command:char) =
     Console.Write "\nEnter Amount: "
     command, Console.ReadLine() |> Decimal.Parse
 
-let depositWithAudit = deposit |> auditAs "deposit" Auditing.console
-let withdrawWithAudit = withdraw |> auditAs "withdraw" Auditing.console
+let depositWithAudit = deposit |> auditAs "deposit" Auditing.fileSystemAudit
+let withdrawWithAudit = withdraw |> auditAs "withdraw" Auditing.fileSystemAudit
 
 let processCommand (account:Account) (command:char, amount:decimal) =
     match command with
