@@ -78,4 +78,6 @@ let findAccountFolder owner =
 let findTransactionsOnDisk owner =
     let accountFolder = findAccountFolder owner
     printfn "AccountFolder : %s" accountFolder
-findTransactionsOnDisk "Patrick"
+    // TODO 19.4 4
+// findTransactionsOnDisk "Patrick"
+
