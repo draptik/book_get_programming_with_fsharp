@@ -15,9 +15,7 @@ let auditAs operationName audit operation amount account =
         {   Amount = amount
             Operation = operationName
             Timestamp = DateTime.UtcNow
-            Accepted = true
-        }
-    audit account transaction
+            Accepted = true }
     let updatedAccount = operation amount account
     let accountIsUnchanged = (updatedAccount = account)
     if accountIsUnchanged then audit account { transaction with Accepted = false }
