@@ -2,8 +2,7 @@
 
 open System
 open Capstone3.Domain
-open Capstone3.Auditing
-open Capstone3.Operations
+open Operations
 
 let isValidCommand command =
     let validCommands = ['d'; 'w'; 'x']
