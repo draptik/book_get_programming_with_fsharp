@@ -2,6 +2,7 @@
 
 open System
 open Capstone3.Domain
+open Capstone3.Auditing
 open Capstone3.Operations
 
 let isValidCommand command =
@@ -15,13 +16,14 @@ let getAmountConsole (command:char) =
     Console.Write "\nEnter Amount: "
     command, Console.ReadLine() |> Decimal.Parse
 
+let depositWithAudit = deposit |> auditAs "deposit" Auditing.console
+let withdrawWithAudit = withdraw |> auditAs "withdraw" Auditing.console
+
 let processCommand (account:Account) (command:char, amount:decimal) =
     match command with
-    | 'd' -> deposit amount account 
-    | 'w' -> withdraw amount account
+    | 'd' -> account |> depositWithAudit amount 
+    | 'w' -> account |> withdrawWithAudit amount 
     | _ -> account
-
-
 
 [<EntryPoint>]
 let main argv =
