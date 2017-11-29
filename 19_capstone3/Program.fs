@@ -22,6 +22,7 @@ let processCommand (account:Account) (command:char, amount:decimal) =
     | _ -> account
 
 
+
 [<EntryPoint>]
 let main argv =
 
