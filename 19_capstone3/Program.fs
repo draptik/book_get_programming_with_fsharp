@@ -13,10 +13,7 @@ let isStopCommand command =
 
 let getAmountConsole (command:char) =
     Console.Write "\nEnter Amount: "
-    let amount = Console.ReadLine()
-    if command = 'd' then 'd', Decimal.Parse amount
-    elif command = 'w' then 'w', Decimal.Parse amount
-    else command, 0M
+    command, Console.ReadLine() |> Decimal.Parse
 
 let processCommand (account:Account) (command:char, amount:decimal) =
     match command with
