@@ -23,3 +23,15 @@ let auditAs operationName audit operation amount account =
     if accountIsUnchanged then audit account { transaction with Accepted = false }
     else audit account transaction
     updatedAccount
+
+let loadAccount (owner: Customer) (accountId: Guid) (transactions: Transaction list) : Account =
+    let openingAccount =
+        {   Balance = 0M
+            AccountId = accountId
+            Owner = owner }
+    
+    transactions
+    |> List.sortBy (fun x -> x.Timestamp)
+    |> List.fold (fun account txn ->
+        if txn.Operation = "withdraw" then account |> withdraw txn.Amount
+        else account |> deposit txn.Amount) openingAccount

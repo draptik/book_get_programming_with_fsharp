@@ -39,3 +39,24 @@ let account =
     |> Seq.takeWhile (not << isStopCommand)
     |> Seq.map getAmount
     |> Seq.fold processCommand openingAccount
+
+let loadAccount (owner: Customer) (accountId: Guid) (transactions: Transaction list) : Account =
+    let openingAccount =
+        {   Balance = 0M
+            AccountId = accountId
+            Owner = owner }
+    
+    transactions
+    |> List.sortBy (fun x -> x.Timestamp)
+    |> List.fold (fun account txn ->
+        if txn.Operation = "withdraw" then account |> withdraw txn.Amount
+        else account |> deposit txn.Amount) openingAccount
+
+let transactions =
+    [
+        {Amount = 100M; Operation = "deposit"; Accepted = true; Timestamp = DateTime.UtcNow}
+        {Amount = 20M; Operation = "deposit"; Accepted = true; Timestamp = DateTime.UtcNow}
+        {Amount = 30M; Operation = "withdraw"; Accepted = true; Timestamp = DateTime.UtcNow}
+    ]
+loadAccount { Name = "Patrick" } Guid.Empty transactions
+
