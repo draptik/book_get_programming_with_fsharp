@@ -11,9 +11,11 @@ let isValidCommand command =
 let isStopCommand command =
     'x' = command
 
-let getAmount (command:char) =
-    if command = 'd' then 'd', 50M
-    elif command = 'w' then 'w', 25M
+let getAmountConsole (command:char) =
+    Console.Write "\nEnter Amount: "
+    let amount = Console.ReadLine()
+    if command = 'd' then 'd', Decimal.Parse amount
+    elif command = 'w' then 'w', Decimal.Parse amount
     else command, 0M
 
 let processCommand (account:Account) (command:char, amount:decimal) =
@@ -41,7 +43,7 @@ let main argv =
         consoleCommands
         |> Seq.filter isValidCommand
         |> Seq.takeWhile (not << isStopCommand)
-        |> Seq.map getAmount
+        |> Seq.map getAmountConsole
         |> Seq.fold processCommand openingAccount
 
     printfn "\n\nClosing account: \n\n%A" closingAccount
