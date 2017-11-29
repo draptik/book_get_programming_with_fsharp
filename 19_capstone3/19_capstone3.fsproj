@@ -7,9 +7,9 @@
 
   <ItemGroup>
     <Compile Include="Domain.fs" />
+    <Compile Include="FileRepository.fs" />
     <Compile Include="Auditing.fs" />
     <Compile Include="Operations.fs" />
-    <Compile Include="FileRepository.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
