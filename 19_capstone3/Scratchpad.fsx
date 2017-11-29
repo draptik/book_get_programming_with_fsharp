@@ -65,12 +65,13 @@ let transactions =
 loadAccount { Name = "Patrick" } Guid.Empty transactions
 
 let accountsPath =
-    let path = @"19_capstone3/logging"
+    let path = "accounts"
     Directory.CreateDirectory path |> ignore
     path
 
 let findAccountFolder owner =
-    let folders = Directory.EnumerateDirectories(accountsPath, sprintf "%s" owner)    
+    let path = Path.Combine(accountsPath, owner)
+    let folders = Directory.EnumerateDirectories(accountsPath, sprintf "%s_*" owner)    
     printfn "%A" folders
     if Seq.isEmpty folders then ""
     else
