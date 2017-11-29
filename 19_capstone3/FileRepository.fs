@@ -1,7 +1,7 @@
 module Capstone3.FileRepository
 
 open Capstone3.Domain
-open Capstone3.Domain.Transactions
+open Transactions
 open System.IO
 open System
 
