@@ -85,7 +85,8 @@ let findTransactionsOnDisk owner =
     accountFolder 
     |> Directory.EnumerateFiles
     // TODO: I would like to deconstruct the following (especially the '>>' operator):
-    |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+    |> Seq.map File.ReadAllText
+    |> Seq.map Transactions.deserialize
 
 // findTransactionsOnDisk "Patrick"
 
