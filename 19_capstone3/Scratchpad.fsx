@@ -77,7 +77,15 @@ let findAccountFolder owner =
 
 let findTransactionsOnDisk owner =
     let accountFolder = findAccountFolder owner
-    printfn "AccountFolder : %s" accountFolder
+    // printfn "AccountFolder : %s" accountFolder
     // TODO 19.4 4
+    // let accountFolderParts = accountFolder.Split([|"_"|], StringSplitOptions.None)
+    // let accountId = accountFolderParts.Split([|"."|], StringSplitOptions.None).[0]
+
+    accountFolder 
+    |> Directory.EnumerateFiles
+    // TODO: I would like to deconstruct the following (especially the '>>' operator):
+    |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+
 // findTransactionsOnDisk "Patrick"
 
