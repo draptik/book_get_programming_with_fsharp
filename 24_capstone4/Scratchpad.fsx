@@ -58,7 +58,7 @@ limit ("medium", 1) = 500
 let getCreditLimit customer =
     match customer with
     | "medium", 1 -> 500
-    | "good", years when years < 2 -> 750
+    | "good", years when years < 2 -> 750 // 20.2.4 Exhaustive checking
     | "good", 2 -> 1000
     | "good", _ -> 2000
     | _ -> 250    
@@ -66,3 +66,16 @@ let getCreditLimit customer =
 getCreditLimit ("medium", 1) = 500
 getCreditLimit ("bad", 1) = 250
 getCreditLimit ("good", 1) = 750 
+
+// 20.2.5 Nested matches
+let getCreditLimitNested customer =
+    match customer with
+    | "medium", 1 -> 500
+    | "good", years ->
+        match years with
+        | 0 | 1 -> 750
+        | 2 -> 1000
+        | _ -> 2000
+    | _ -> 250
+
+getCreditLimitNested ("good", 0) = 750
