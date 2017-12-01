@@ -10,6 +10,7 @@ let private accountsPath =
     Directory.CreateDirectory path |> ignore
     path
 
+// Only need when working from REPL
 let patchedAccountsPath = Path.Combine(accountsPath)
 
 let findAccountFolder owner =

@@ -1,7 +1,6 @@
 ﻿module Capstone3.Program
 
 open System
-open Capstone3.Domain
 open Operations
 open Auditing
 open FileRepository
@@ -21,7 +20,7 @@ let depositWithAudit = deposit |> auditAs "deposit" fileSystemAudit
 let withdrawWithAudit = withdraw |> auditAs "withdraw" fileSystemAudit
 let getAccount = findTransactionsOnDisk >> loadAccount
 
-let processCommand (account:Account) (command:char, amount:decimal) =
+let processCommand account (command, amount) =
     match command with
     | 'd' -> account |> depositWithAudit amount 
     | 'w' -> account |> withdrawWithAudit amount 
