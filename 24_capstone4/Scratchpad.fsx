@@ -58,10 +58,11 @@ limit ("medium", 1) = 500
 let getCreditLimit customer =
     match customer with
     | "medium", 1 -> 500
-    | "good", 0 | "good", 1 -> 750
+    | "good", years when years < 2 -> 750
     | "good", 2 -> 1000
     | "good", _ -> 2000
     | _ -> 250    
 
 getCreditLimit ("medium", 1) = 500
 getCreditLimit ("bad", 1) = 250
+getCreditLimit ("good", 1) = 750 
