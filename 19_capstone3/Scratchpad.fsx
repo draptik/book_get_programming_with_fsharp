@@ -63,34 +63,37 @@ let transactions =
 // loadAccount { Name = "Patrick" } Guid.Empty transactions
 
 let accountsPath =
-    let path = "accounts"
+    let path = @"accounts"
     Directory.CreateDirectory path |> ignore
     path
+accountsPath
+
+let patchedAccountsPath = Path.Combine("19_capstone3", accountsPath)
 
 let findAccountFolder owner =
-    let folders = Directory.EnumerateDirectories(accountsPath, sprintf "%s_*" owner)    
+    let folders = Directory.EnumerateDirectories(patchedAccountsPath, sprintf "%s_*" owner)
     if Seq.isEmpty folders then ""
     else
         let folder = Seq.head folders
         DirectoryInfo(folder).Name
-// findAccountFolder "Patrick" = "Patrick_00000000-0000-0000-0000-000000000000"
+findAccountFolder "Patrick" = "Patrick_00000000-0000-0000-0000-000000000000"
 
 let buildPath(owner, accountId:Guid) = 
-    Path.Combine(accountsPath, sprintf @"%s_%O" owner accountId)
-// buildPath("Patrick", Guid("00000000-0000-0000-0000-000000000000")) =
-//     Path.Combine("accounts", "Patrick_00000000-0000-0000-0000-000000000000")
+    Path.Combine(patchedAccountsPath, sprintf @"%s_%O" owner accountId)
+buildPath("Patrick", Guid("00000000-0000-0000-0000-000000000000")) =
+    Path.Combine(patchedAccountsPath, "Patrick_00000000-0000-0000-0000-000000000000")
 
 let findTransactionsOnDisk owner =
     let accountFolder = findAccountFolder owner
-    // printfn "AccountFolder : %s" accountFolder
-    // TODO 19.4 4
-    let owner, accountId =
-        let parts = accountFolder.Split '_'
-        parts.[0], Guid.Parse parts.[1]
+    if String.IsNullOrEmpty accountFolder then owner, Guid.NewGuid(), Seq.empty
+    else
+        let owner, accountId =
+            let parts = accountFolder.Split '_'
+            parts.[0], Guid.Parse parts.[1]
 
-    owner, accountId, buidPath(owner, accountId)
-    |> Directory.EnumerateFiles
-    |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+        owner, accountId, buildPath(owner, accountId)
+        |> Directory.EnumerateFiles
+        |> Seq.map (File.ReadAllText >> Transactions.deserialize)
 
-// findTransactionsOnDisk "Patrick"
+findTransactionsOnDisk "Patrick"
 
