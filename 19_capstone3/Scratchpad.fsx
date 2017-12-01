@@ -91,11 +91,10 @@ let loadTransactions (folder: string) =
     owner, accountId, buildPath(owner, accountId)
     |> Directory.EnumerateFiles
     |> Seq.map (File.ReadAllText >> Transactions.deserialize)
+loadTransactions "Patrick_00000000-0000-0000-0000-000000000000"
 
 let findTransactionsOnDisk owner =
     let accountFolder = findAccountFolder owner
     if String.IsNullOrEmpty accountFolder then owner, Guid.NewGuid(), Seq.empty
     else loadTransactions accountFolder
-        
 findTransactionsOnDisk "Patrick"
-

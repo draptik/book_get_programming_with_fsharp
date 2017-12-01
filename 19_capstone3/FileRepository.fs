@@ -10,15 +10,31 @@ let private accountsPath =
     Directory.CreateDirectory path |> ignore
     path
 
+let patchedAccountsPath = Path.Combine("19_capstone3", accountsPath)
+
 let findAccountFolder owner =
-    let folders = Directory.EnumerateDirectories(accountsPath, sprintf "%s_*" owner)    
+    let folders = Directory.EnumerateDirectories(patchedAccountsPath, sprintf "%s_*" owner)    
     if Seq.isEmpty folders then ""
     else
         let folder = Seq.head folders
         DirectoryInfo(folder).Name
 
 let private buildPath(owner, accountId:Guid) = 
-    Path.Combine(accountsPath, sprintf @"%s_%O" owner accountId)
+    Path.Combine(patchedAccountsPath, sprintf @"%s_%O" owner accountId)
+
+let loadTransactions (folder: string) =
+    let owner, accountId =
+        let parts = folder.Split '_'
+        parts.[0], Guid.Parse parts.[1]
+
+    owner, accountId, buildPath(owner, accountId)
+    |> Directory.EnumerateFiles
+    |> Seq.map (File.ReadAllText >> deserialize)
+
+let findTransactionsOnDisk owner =
+    let accountFolder = findAccountFolder owner
+    if String.IsNullOrEmpty accountFolder then owner, Guid.NewGuid(), Seq.empty
+    else loadTransactions accountFolder
 
 let writeTransaction accountId owner (transaction: Transaction) =
     let path = buildPath(owner, accountId)
