@@ -29,11 +29,14 @@ let processCommand (account:Account) (command:char, amount:decimal) =
 [<EntryPoint>]
 let main argv =
 
+    let getAccount name =
+        findTransactionsOnDisk name 
+        |> loadAccount
+
     let openingAccount =
         Console.Write "Please enter your name: "
         let name = Console.ReadLine()
-        findTransactionsOnDisk name
-        |> loadAccount
+        getAccount name
     
     let consoleCommands = seq {
         while true do
