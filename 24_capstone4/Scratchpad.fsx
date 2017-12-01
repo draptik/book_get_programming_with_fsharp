@@ -94,3 +94,36 @@ let handleCustomer customers =
  
 handleCustomer [] // throws exception
 handleCustomer [ { Balance = 10; Name = "Joe" } ] // prints name
+
+// 20.3.2 Records
+
+let getStatus customer =
+    match customer with
+    | { Balance = 0 } -> "Customer has empty balance!"
+    | { Name = "Isaac" } -> "This is a great customer!"
+    | { Name = name; Balance = 50 } -> sprintf "%s has a large balance!" name
+    | { Name = name } -> sprintf "%s is a normal customer" name
+ 
+{ Balance = 50; Name = "Joe" } |> getStatus
+{ Balance = 0; Name = "Joe" } |> getStatus
+{ Balance = 10; Name = "Isaac" } |> getStatus
+{ Balance = 10; Name = "Other" } |> getStatus
+
+
+// You can even mix and match patterns – how about checking that a list of customers has three elements, the first customer is called “Tanya” and the second customer has a balance of 25? No problem!
+type Customer2 = { Name2: string; Balance2: int }
+let checkStrangeCondition customers =
+    match customers with
+    | [ { Name2 = "Tanya" }; { Balance2 = 25 }; _ ] -> "It's a match!"
+    | _ -> "No match!"
+checkStrangeCondition [ 
+    {Name2 = "Tanya"; Balance2 = 1000 } 
+    {Name2 = "Foooo"; Balance2 = 25 } 
+    {Name2 = "Baaar"; Balance2 = 500 }]
+checkStrangeCondition [ 
+    {Name2 = "Tanya"; Balance2 = 1000 } 
+    {Name2 = "Foooo"; Balance2 = 25 } 
+    {Name2 = "Foooo"; Balance2 = 25 } 
+    {Name2 = "Baaar"; Balance2 = 500 }]    
+
+    
