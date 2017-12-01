@@ -217,3 +217,46 @@ HardDisk(1000, 1) |> describe
 
 // 21.3.1 Nested DUs
 
+type MMCDisk =
+    | RsMmc
+    | MmcPlus
+    | SecureMMC
+
+type DiskNested =
+| HardDisk of RPM:int * Platters:int
+| SolidState
+| MMC of MMCDisk * NumberOfPins:int
+//       ^^^^^^^   ^^^^^^^^^^^^
+//        field1     field2
+
+// 21.3.2 Shared fields
+
+// OO: shared fields in base class
+// FP: record with common field and DU "field" for varying implementation
+
+type DiskInfo =
+    {   Manufacturer : string
+        SizeGb : int
+        DiskData : DiskNested }
+
+type Computer2 = { Manufacturer : string;  Disks : DiskInfo list }
+
+let myPc =
+    { Manufacturer = "Computers Inc."
+      Disks =
+        [ { Manufacturer = "HardDisks Inc."
+            SizeGb = 100
+            DiskData = HardDisk(5400, 7) }
+          { Manufacturer = "SuperDisks Corp."
+            SizeGb = 250
+            DiskData = SolidState } ] }        
+
+// 21.4.2 Creating Enums
+
+type Printer =
+    | Inkjet = 0
+    | Laserjet = 1
+    | DotMatrix = 2
+
+// (the explicit ordinal is required in F#)    
+
