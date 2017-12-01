@@ -126,4 +126,26 @@ checkStrangeCondition [
     {Name2 = "Foooo"; Balance2 = 25 } 
     {Name2 = "Baaar"; Balance2 = 500 }]    
 
-    
+// 20.5 Exercises
+
+// creating a random list of numbers of variable length and writing pattern matches to test if the list:
+//
+// - Is a specific length
+// - Is empty
+// - Has the first item equal to 5 (hint: use head / tail syntax here with ::)
+
+// random list of numbers
+let genRandomNumbers count =
+    let rnd = System.Random()
+    List.init count (fun _ -> rnd.Next())
+
+let someCheck someList =
+    match someList with
+    | [] -> printfn "List is empty!"
+    | l when List.length l = 10 -> printfn "List has length 10"
+    | head :: _ when head = 5  -> printfn "First entry is 5"
+    | _ -> ()
+
+genRandomNumbers 0 |> someCheck
+genRandomNumbers 10 |> someCheck
+5 :: genRandomNumbers 3 |> someCheck
