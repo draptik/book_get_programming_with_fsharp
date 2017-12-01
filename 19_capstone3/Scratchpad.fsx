@@ -75,14 +75,20 @@ let findAccountFolder owner =
         DirectoryInfo(folder).Name
 // findAccountFolder "Patrick" = "Patrick_00000000-0000-0000-0000-000000000000"
 
+let buildPath(owner, accountId:Guid) = 
+    Path.Combine(accountsPath, sprintf @"%s_%O" owner accountId)
+// buildPath("Patrick", Guid("00000000-0000-0000-0000-000000000000")) =
+//     Path.Combine("accounts", "Patrick_00000000-0000-0000-0000-000000000000")
+
 let findTransactionsOnDisk owner =
     let accountFolder = findAccountFolder owner
     // printfn "AccountFolder : %s" accountFolder
     // TODO 19.4 4
-    // let accountFolderParts = accountFolder.Split([|"_"|], StringSplitOptions.None)
-    // let accountId = accountFolderParts.Split([|"."|], StringSplitOptions.None).[0]
+    let owner, accountId =
+        let parts = accountFolder.Split '_'
+        parts.[0], Guid.Parse parts.[1]
 
-    accountFolder 
+    owner, accountId, buidPath(owner, accountId)
     |> Directory.EnumerateFiles
     |> Seq.map (File.ReadAllText >> Transactions.deserialize)
 
