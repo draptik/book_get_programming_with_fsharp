@@ -213,3 +213,7 @@ HardDisk(5400, 7) |> describe
 HardDisk(1000, 7) |> describe
 HardDisk(1000, 1) |> describe
 
+// 21.3 Tips for working with Discriminated Unions
+
+// 21.3.1 Nested DUs
+
