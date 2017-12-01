@@ -4,6 +4,7 @@ open System
 open Capstone3.Domain
 open Operations
 open Auditing
+open FileRepository
 
 let isValidCommand command =
     let validCommands = ['d'; 'w'; 'x']
@@ -31,7 +32,8 @@ let main argv =
     let openingAccount =
         Console.Write "Please enter your name: "
         let name = Console.ReadLine()
-        { Owner = { Name = name }; Balance = 0M; AccountId = Guid.Empty }
+        let owner, accountId, transactions = findTransactionsOnDisk name
+        loadAccount {Name = owner} accountId (transactions |> Seq.toList)
     
     let consoleCommands = seq {
         while true do

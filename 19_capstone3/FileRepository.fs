@@ -10,7 +10,7 @@ let private accountsPath =
     Directory.CreateDirectory path |> ignore
     path
 
-let patchedAccountsPath = Path.Combine("19_capstone3", accountsPath)
+let patchedAccountsPath = Path.Combine(accountsPath)
 
 let findAccountFolder owner =
     let folders = Directory.EnumerateDirectories(patchedAccountsPath, sprintf "%s_*" owner)    
