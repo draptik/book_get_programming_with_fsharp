@@ -79,3 +79,18 @@ let getCreditLimitNested customer =
     | _ -> 250
 
 getCreditLimitNested ("good", 0) = 750
+
+// 20.3 Flexible pattern matching
+
+// 20.3.1 Collections
+
+type Customer = { Name: string; Balance: int }
+let handleCustomer customers =
+    match customers with
+    | [] -> failwith "No customers supplied!"
+    | [ customer ] -> printfn "Single customer, name is %s" customer.Name
+    | [ first; second ] -> printfn "Two customers, balance = %d" (first.Balance + second.Balance)
+    | customers -> printfn "Customers supplied: %d" customers.Length
+ 
+handleCustomer [] // throws exception
+handleCustomer [ { Balance = 10; Name = "Joe" } ] // prints name
