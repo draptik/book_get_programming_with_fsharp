@@ -22,7 +22,7 @@ let auditAs operationName audit operation amount account =
     else audit account transaction
     updatedAccount
 
-let loadAccount ((owner: Customer), (accountId: Guid), (transactions: Transaction list)) : Account =
+let loadAccount (owner, accountId, transactions) : Account =
     let openingAccount =
         {   Balance = 0M
             AccountId = accountId
