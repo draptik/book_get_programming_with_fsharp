@@ -19,6 +19,7 @@ let getAmountConsole (command:char) =
 
 let depositWithAudit = deposit |> auditAs "deposit" fileSystemAudit
 let withdrawWithAudit = withdraw |> auditAs "withdraw" fileSystemAudit
+let getAccount = findTransactionsOnDisk >> loadAccount
 
 let processCommand (account:Account) (command:char, amount:decimal) =
     match command with
@@ -29,14 +30,9 @@ let processCommand (account:Account) (command:char, amount:decimal) =
 [<EntryPoint>]
 let main argv =
 
-    let getAccount name =
-        findTransactionsOnDisk name 
-        |> loadAccount
-
     let openingAccount =
         Console.Write "Please enter your name: "
-        let name = Console.ReadLine()
-        getAccount name
+        Console.ReadLine() |> getAccount
     
     let consoleCommands = seq {
         while true do
