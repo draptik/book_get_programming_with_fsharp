@@ -27,13 +27,14 @@ let loadTransactions (folder: string) =
         let parts = folder.Split '_'
         parts.[0], Guid.Parse parts.[1]
 
-    owner, accountId, buildPath(owner, accountId)
+    {Name = owner}, accountId, buildPath(owner, accountId)
     |> Directory.EnumerateFiles
     |> Seq.map (File.ReadAllText >> deserialize)
+    |> Seq.toList
 
 let findTransactionsOnDisk owner =
     let accountFolder = findAccountFolder owner
-    if String.IsNullOrEmpty accountFolder then owner, Guid.NewGuid(), Seq.empty
+    if String.IsNullOrEmpty accountFolder then {Name = owner}, Guid.NewGuid(), List.empty
     else loadTransactions accountFolder
 
 let writeTransaction accountId owner (transaction: Transaction) =

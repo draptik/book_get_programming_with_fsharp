@@ -32,8 +32,8 @@ let main argv =
     let openingAccount =
         Console.Write "Please enter your name: "
         let name = Console.ReadLine()
-        let owner, accountId, transactions = findTransactionsOnDisk name
-        loadAccount {Name = owner} accountId (transactions |> Seq.toList)
+        findTransactionsOnDisk name
+        |> loadAccount
     
     let consoleCommands = seq {
         while true do
