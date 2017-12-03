@@ -16,6 +16,11 @@ type Transaction =
         Timestamp: DateTime
         Accepted: bool }
 
+type Command =
+| Withdraw
+| Deposit
+| Exit
+
 module Transactions =
     
     let serialized transaction =

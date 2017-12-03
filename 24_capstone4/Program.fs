@@ -1,18 +1,13 @@
-﻿module Capstone3.Program
+﻿module Capstone4.Program
+
+open Capstone4.Domain
 
 open System
 open Operations
 open Auditing
 open FileRepository
 
-let isValidCommand command =
-    let validCommands = ['d'; 'w'; 'x']
-    validCommands |> Seq.contains command
-
-let isStopCommand command =
-    'x' = command
-
-let getAmountConsole (command:char) =
+let getAmountConsole command =
     Console.Write "\nEnter Amount: "
     command, Console.ReadLine() |> Decimal.Parse
 
@@ -22,9 +17,18 @@ let getAccount = findTransactionsOnDisk >> loadAccount
 
 let processCommand account (command, amount) =
     match command with
-    | 'd' -> account |> depositWithAudit amount 
-    | 'w' -> account |> withdrawWithAudit amount 
+    | Deposit -> account |> depositWithAudit amount 
+    | Withdraw -> account |> withdrawWithAudit amount 
     | _ -> account
+
+let tryParseCommand cmd =
+    match cmd with
+    | 'd' -> Some Deposit
+    | 'w' -> Some Withdraw
+    | 'x' -> Some Exit
+    | _ -> None
+
+
 
 [<EntryPoint>]
 let main argv =
@@ -41,8 +45,8 @@ let main argv =
 
     let closingAccount =
         consoleCommands
-        |> Seq.filter isValidCommand
-        |> Seq.takeWhile (not << isStopCommand)
+        |> Seq.choose tryParseCommand
+        |> Seq.takeWhile ((<>) Exit)
         |> Seq.map getAmountConsole
         |> Seq.fold processCommand openingAccount
 
