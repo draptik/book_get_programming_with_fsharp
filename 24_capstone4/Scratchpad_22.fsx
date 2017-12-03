@@ -85,3 +85,22 @@ let tryLoadCustomer customerId =
 [ 1 .. 10 ] 
 |> List.choose tryLoadCustomer 
 |> printfn "%A"
+
+// 22.4.3   “Try” functions
+// You’ll see through the collections modules functions that start with try, such as tryFind, tryHead and tryItem. Think of these as equivalent to LINQ’s OrDefault functions, except instead of returning null if the function doesn’t have any output, these functions all return an Option value – Some value if something was found, and None otherwise.
+
+// 22.5 Summary
+
+// Exercise
+open System.IO
+
+let findFile filename = 
+    let exists = File.Exists (filename)
+    if exists then Some (FileInfo(filename))
+    else None
+
+let displayInfo filename =
+    match findFile filename with
+    | Some f -> printfn "FileInfo: %A" f
+    | None -> printfn "File not found :-("
+// ".gitignore" |> displayInfo
