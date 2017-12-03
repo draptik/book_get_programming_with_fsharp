@@ -24,6 +24,8 @@
     "cSpell.language": "en",
     "cSpell.words": [
         "LINQ’s",
-        "printfn"
+        "deserialize",
+        "printfn",
+        "sprintf"
     ]
 }
