@@ -76,8 +76,43 @@
 
 // We can now guarantee that one and only one type of contact is supplied e.g. Telephone.    
 
+
+
+// 23.1.3   Using Optional values within a domain
+
 // Exercise
 
+
+// type CustomerId = CustomerId of string
+
+// type ContactDetails =
+// | Email of string
+// | Telephone of string
+// | Address of string
+
+// type Customer =
+//     {   CustomerId: CustomerId
+//         PrimaryContactDetails: ContactDetails 
+//         SecondaryContactDetails: ContactDetails option }
+
+// let createCustomer customerId primaryContactDetails secondaryContactDetails =
+//     { CustomerId = customerId
+//       PrimaryContactDetails = primaryContactDetails
+//       SecondaryContactDetails = secondaryContactDetails }
+
+// let customer =
+//     createCustomer 
+//         (CustomerId "C-123")
+//         (Email "nicki@myemail.com")
+//         (Some (Address "1 Street"))
+
+// printfn "%A" customer
+
+
+
+// 23.2   Encoding business rules with marker types     
+
+// Exercise
 
 type CustomerId = CustomerId of string
 
@@ -91,16 +126,27 @@ type Customer =
         PrimaryContactDetails: ContactDetails 
         SecondaryContactDetails: ContactDetails option }
 
+type GenuineCustomer = GenuineCustomer of Customer
+
 let createCustomer customerId primaryContactDetails secondaryContactDetails =
     { CustomerId = customerId
       PrimaryContactDetails = primaryContactDetails
       SecondaryContactDetails = secondaryContactDetails }
 
+let validateCustomer customer =
+    match customer.PrimaryContactDetails with
+    | Email e when e.EndsWith "SuperCorp.com" -> Some(GenuineCustomer customer)
+    | Address _ | Telephone _ -> Some(GenuineCustomer customer)
+    | Email _ -> None
+ 
+let sendWelcomeEmail (GenuineCustomer customer) =
+    printfn "Hello, %A, and welcome to our site!" customer.CustomerId
+
+
 let customer =
     createCustomer 
         (CustomerId "C-123")
-        (Email "nicki@myemail.com")
+        (Address "nicki@SuperCorp.com")
         (Some (Address "1 Street"))
 
-printfn "%A" customer
-     
+validateCustomer customer    
