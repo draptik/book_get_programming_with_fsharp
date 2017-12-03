@@ -28,28 +28,79 @@
 // let isTheSameAddress = (myAddress = "1 The Street") //won't compile
 // let (Address addressData) = myAddress
 
+// Exercise
+
+// type CustomerId = CustomerId of string
+// type Email = Email of string
+// type Telephone = Telephone of string
+// type Address = Address of string
+
+// type Customer =
+//     {   CustomerId: CustomerId
+//         Email: Email
+//         Telephone: Telephone
+//         Address: Address}
+
+// let createCustomer customerId email telephone address =
+//     { CustomerId = customerId
+//       Email = email
+//       Telephone = telephone
+//       Address = address }
+
+// createCustomer 
+//     (CustomerId "C-123")
+//     (Email "nicki@myemail.com")
+//     (Telephone "029-293-23")
+//     (Address "1 The Street")
+
+// Exercise
+
+// type CustomerId = CustomerId of string
+
+// type ContactDetails =
+// | Email of string
+// | Telephone of string
+// | Address of string
+
+// type Customer =
+//     {   CustomerId: CustomerId
+//         ContactDetails: ContactDetails }
+
+// let createCustomer customerId contactDetails =
+//     { CustomerId = customerId
+//       ContactDetails = contactDetails }
+
+// createCustomer 
+//     (CustomerId "C-123")
+//     (Email "nicki@myemail.com")
+
+// We can now guarantee that one and only one type of contact is supplied e.g. Telephone.    
+
+// Exercise
+
+
 type CustomerId = CustomerId of string
-type Email = Email of string
-type Telephone = Telephone of string
-type Address = Address of string
+
+type ContactDetails =
+| Email of string
+| Telephone of string
+| Address of string
 
 type Customer =
     {   CustomerId: CustomerId
-        Email: Email
-        Telephone: Telephone
-        Address: Address}
+        PrimaryContactDetails: ContactDetails 
+        SecondaryContactDetails: ContactDetails option }
 
-let createCustomer customerId email telephone address =
+let createCustomer customerId primaryContactDetails secondaryContactDetails =
     { CustomerId = customerId
-      Email = email
-      Telephone = telephone
-      Address = address }
+      PrimaryContactDetails = primaryContactDetails
+      SecondaryContactDetails = secondaryContactDetails }
 
-createCustomer 
-    (CustomerId "C-123")
-    (Email "nicki@myemail.com")
-    (Telephone "029-293-23")
-    (Address "1 The Street")
+let customer =
+    createCustomer 
+        (CustomerId "C-123")
+        (Email "nicki@myemail.com")
+        (Some (Address "1 Street"))
 
-    
+printfn "%A" customer
      
