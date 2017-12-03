@@ -150,3 +150,19 @@ let customer =
         (Some (Address "1 Street"))
 
 validateCustomer customer    
+
+
+
+
+// 23.3   Results vs Exceptions
+
+// type Result<'a> =
+// | Success of 'a
+// | Failure of string
+ 
+// insertCustomer : contactDetails:ContactDetails -> Result<CustomerId>
+ 
+// match insertContact (Email "nicki@myemail.com") with
+// | Success customerId -> printfn "Saved with %A" customerId
+// | Failure error -> printfn "Unable to save: %s" error
+
