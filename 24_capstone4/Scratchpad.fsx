@@ -18,5 +18,3 @@ let tryParseCommand cmd =
 |> Seq.takeWhile ((<>) Exit)
 
 
-[ Some(Withdraw); Some(Deposit); Some(Exit); Some(Deposit) ]
-|> Seq.takeWhile (Withdraw)
