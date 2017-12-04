@@ -1,3 +1,4 @@
+open System.Security.Cryptography.X509Certificates
 
 // 24.2.2   Adding a command handler with discriminated unions
 
@@ -42,3 +43,11 @@ let tryParseCommand cmd =
 |> Seq.choose tryParseCommand
 |> Seq.takeWhile ((<>) Exit)
 |> Seq.choose tryGetBankOperation
+
+
+open System
+
+let result = "10" |> Int32.TryParse
+match result with
+| true, result -> printfn "x is a string that parses to %i" result
+| false, _ -> printfn "default"
