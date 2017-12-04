@@ -9,9 +9,12 @@ open FileRepository
 
 type Command = BankCommand of BankOperation | Exit
 
-let getAmountConsole command =
+let tryGetAmount command =
     Console.Write "\nEnter Amount: "
-    command, Console.ReadLine() |> Decimal.Parse
+    let amount = Console.ReadLine() |> Decimal.TryParse
+    match amount with
+    | true, amount -> Some(command, amount)
+    | false, _ -> None
 
 let depositWithAudit = deposit |> auditAs "deposit" fileSystemAudit
 let withdrawWithAudit = withdraw |> auditAs "withdraw" fileSystemAudit
@@ -53,7 +56,7 @@ let main argv =
         |> Seq.choose tryParseCommand
         |> Seq.takeWhile ((<>) Exit)
         |> Seq.choose tryGetBankOperation
-        |> Seq.map getAmountConsole
+        |> Seq.choose tryGetAmount
         |> Seq.fold processCommand openingAccount
 
     printfn "\n\nClosing account: \n\n%A" closingAccount
