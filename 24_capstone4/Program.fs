@@ -18,7 +18,16 @@ let tryGetAmount command =
 
 let depositWithAudit = deposit |> auditAs "deposit" fileSystemAudit
 let withdrawWithAudit = withdraw |> auditAs "withdraw" fileSystemAudit
-let getAccount = findTransactionsOnDisk >> loadAccount
+
+// let loadAccountOptional value =
+//     match value with
+//     | Some value -> Some(loadAccount value)
+//     | None -> None
+
+// shorthand for the above code:
+let loadAccountOptional = Option.map loadAccount
+
+let tryLoadAccountFromDisk = tryFindTransactionsOnDisk >> loadAccountOptional
 
 let processCommand account (command, amount) =
     match command with
@@ -43,7 +52,14 @@ let main argv =
 
     let openingAccount =
         Console.Write "Please enter your name: "
-        Console.ReadLine() |> getAccount
+        let owner = Console.ReadLine()
+
+        match (tryLoadAccountFromDisk owner) with
+        | Some account -> account
+        | None ->
+            {   Balance = 0M
+                AccountId = Guid.NewGuid()
+                Owner = { Name = owner }}
     
     let consoleCommands = seq {
         while true do

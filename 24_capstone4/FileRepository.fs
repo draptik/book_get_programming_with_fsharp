@@ -13,12 +13,12 @@ let private accountsPath =
 // Only need when working from REPL
 let patchedAccountsPath = Path.Combine(accountsPath)
 
-let findAccountFolder owner =
+let tryFindAccountFolder owner =
     let folders = Directory.EnumerateDirectories(patchedAccountsPath, sprintf "%s_*" owner)    
-    if Seq.isEmpty folders then ""
+    if Seq.isEmpty folders then None
     else
         let folder = Seq.head folders
-        DirectoryInfo(folder).Name
+        Some (DirectoryInfo(folder).Name)
 
 let private buildPath(owner, accountId:Guid) = 
     Path.Combine(patchedAccountsPath, sprintf @"%s_%O" owner accountId)
@@ -33,10 +33,11 @@ let loadTransactions (folder: string) =
     |> Seq.map (File.ReadAllText >> deserialize)
     |> Seq.toList
 
-let findTransactionsOnDisk owner =
-    let accountFolder = findAccountFolder owner
-    if String.IsNullOrEmpty accountFolder then {Name = owner}, Guid.NewGuid(), List.empty
-    else loadTransactions accountFolder
+let tryFindTransactionsOnDisk owner =
+    let accountFolder = tryFindAccountFolder owner
+    match accountFolder with
+    | Some folder -> Some (loadTransactions folder)
+    | None -> None
 
 let writeTransaction accountId owner (transaction: Transaction) =
     let path = buildPath(owner, accountId)
