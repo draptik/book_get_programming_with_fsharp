@@ -16,10 +16,7 @@ type Transaction =
         Timestamp: DateTime
         Accepted: bool }
 
-type Command =
-| Withdraw
-| Deposit
-| Exit
+type BankOperation = Deposit | Withdraw
 
 module Transactions =
     

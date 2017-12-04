@@ -41,5 +41,4 @@ let loadAccount (owner, accountId, transactions) =
         match operation, account with
         | Some Deposit, _ -> account |> deposit txn.Amount
         | Some Withdraw, account -> account |> withdraw txn.Amount
-        | Some Exit, _ -> account
         | None, _ -> account) openingAccount

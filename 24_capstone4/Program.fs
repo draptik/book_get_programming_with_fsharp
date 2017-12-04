@@ -7,6 +7,8 @@ open Operations
 open Auditing
 open FileRepository
 
+type Command = BankCommand of BankOperation | Exit
+
 let getAmountConsole command =
     Console.Write "\nEnter Amount: "
     command, Console.ReadLine() |> Decimal.Parse
@@ -19,15 +21,18 @@ let processCommand account (command, amount) =
     match command with
     | Deposit -> account |> depositWithAudit amount 
     | Withdraw -> account |> withdrawWithAudit amount 
-    | _ -> account
 
 let tryParseCommand cmd =
     match cmd with
-    | 'd' -> Some Deposit
-    | 'w' -> Some Withdraw
+    | 'd' -> Some (BankCommand Deposit)
+    | 'w' -> Some (BankCommand Withdraw)
     | 'x' -> Some Exit
     | _ -> None
 
+let tryGetBankOperation cmd =
+    match cmd with
+    | BankCommand op -> Some op
+    | Exit -> None
 
 
 [<EntryPoint>]
@@ -47,6 +52,7 @@ let main argv =
         consoleCommands
         |> Seq.choose tryParseCommand
         |> Seq.takeWhile ((<>) Exit)
+        |> Seq.choose tryGetBankOperation
         |> Seq.map getAmountConsole
         |> Seq.fold processCommand openingAccount
 
