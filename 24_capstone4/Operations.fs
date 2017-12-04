@@ -3,12 +3,28 @@ module Capstone4.Operations
 open System
 open Capstone4.Domain
 
-let deposit amount account =
-    { account with Balance = account.Balance + amount } 
+let rateAccount account =
+    if account.Balance < 0M then Overdrawn account
+    else Credit(CreditAccount account)    
 
-let withdraw amount account =
-    if amount > account.Balance then account
-    else {  account with Balance = account.Balance - amount } 
+let deposit amount account =
+    let account =
+        match account with
+        | Credit (CreditAccount account) -> account
+        | Overdrawn account -> account
+    { account with Balance = account.Balance + amount }
+    |> rateAccount
+
+let withdraw amount (CreditAccount account) =
+    { account with Balance = account.Balance - amount }
+    |> rateAccount
+
+let withdrawSafe amount ratedAccount =
+    match ratedAccount with
+    | Credit account -> account |> withdraw amount
+    | Overdrawn _ -> 
+        printfn "Your account is overdrawn - withdrawal rejected!"
+        ratedAccount
 
 let auditAs operationName audit operation amount account =
     let transaction = 
@@ -40,5 +56,5 @@ let loadAccount (owner, accountId, transactions) =
         let operation = tryParseSerializedOperation txn.Operation
         match operation, account with
         | Some Deposit, _ -> account |> deposit txn.Amount
-        | Some Withdraw, account -> account |> withdraw txn.Amount
+        | Some Withdraw, account -> account |> withdrawSafe txn.Amount
         | None, _ -> account) openingAccount
