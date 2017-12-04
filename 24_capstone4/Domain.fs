@@ -10,6 +10,12 @@ type Account =
       AccountId: Guid
       Owner: Customer }
 
+type CreditAccount = CreditAccount of Account
+
+type RatedAccount =
+    | Credit of CreditAccount
+    | Overdrawn of Account
+
 type Transaction =
     {   Amount: decimal
         Operation: string
