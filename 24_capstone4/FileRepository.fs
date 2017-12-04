@@ -33,11 +33,7 @@ let loadTransactions (folder: string) =
     |> Seq.map (File.ReadAllText >> deserialize)
     |> Seq.toList
 
-let tryFindTransactionsOnDisk owner =
-    let accountFolder = tryFindAccountFolder owner
-    match accountFolder with
-    | Some folder -> Some (loadTransactions folder)
-    | None -> None
+let tryFindTransactionsOnDisk = tryFindAccountFolder >> Option.map loadTransactions
 
 let writeTransaction accountId owner (transaction: Transaction) =
     let path = buildPath(owner, accountId)

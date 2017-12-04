@@ -26,16 +26,10 @@ let withdrawSafe amount ratedAccount =
         printfn "Your account is overdrawn - withdrawal rejected!"
         ratedAccount
 
-let auditAs operationName audit operation amount account =
-    let transaction = 
-        {   Amount = amount
-            Operation = operationName
-            Timestamp = DateTime.UtcNow
-            Accepted = true }
+let auditAs operationName audit operation amount account accountId owner =
+    let transaction = { Amount = amount; Operation = operationName; Timestamp = DateTime.UtcNow }
     let updatedAccount = operation amount account
-    let accountIsUnchanged = (updatedAccount = account)
-    if accountIsUnchanged then audit account { transaction with Accepted = false }
-    else audit account transaction
+    audit accountId owner.Name transaction
     updatedAccount
 
 let tryParseSerializedOperation operation =
@@ -56,5 +50,6 @@ let loadAccount (owner, accountId, transactions) =
         let operation = tryParseSerializedOperation txn.Operation
         match operation, account with
         | Some Deposit, _ -> account |> deposit txn.Amount
-        | Some Withdraw, account -> account |> withdrawSafe txn.Amount
+        | Some Withdraw, Credit account -> account |> withdraw txn.Amount
+        | Some Withdraw, Overdrawn _ -> account
         | None, _ -> account) openingAccount

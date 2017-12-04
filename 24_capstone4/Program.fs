@@ -16,13 +16,13 @@ let tryGetAmount command =
     | true, amount -> Some(command, amount)
     | false, _ -> None
 
-let depositWithAudit = deposit |> auditAs "deposit" fileSystemAudit
-let withdrawWithAudit = withdraw |> auditAs "withdraw" fileSystemAudit
+let withdrawWithAudit amount (CreditAccount account as creditAccount) = 
+    auditAs "withdraw" composedLogger withdraw amount creditAccount account.AccountId account.Owner
 
-// let loadAccountOptional value =
-//     match value with
-//     | Some value -> Some(loadAccount value)
-//     | None -> None
+let depositWithAudit = 
+    deposit |> auditAs "deposit" fileSystemAudit
+
+
 
 // shorthand for the above code:
 let loadAccountOptional = Option.map loadAccount
@@ -57,9 +57,9 @@ let main argv =
         match (tryLoadAccountFromDisk owner) with
         | Some account -> account
         | None ->
-            {   Balance = 0M
-                AccountId = Guid.NewGuid()
-                Owner = { Name = owner }}
+            RatedAccount(Credit {   Balance = 0M
+                                    AccountId = Guid.NewGuid()
+                                    Owner = { Name = owner }}
     
     let consoleCommands = seq {
         while true do
