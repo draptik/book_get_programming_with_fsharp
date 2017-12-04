@@ -22,6 +22,12 @@ let auditAs operationName audit operation amount account =
     else audit account transaction
     updatedAccount
 
+let tryParseSerializedOperation operation =
+    match operation with
+    | "withdraw" -> Some Withdraw
+    | "deposit" -> Some Deposit
+    | _ -> None
+
 let loadAccount (owner, accountId, transactions) =
     let openingAccount =
         {   Balance = 0M
@@ -31,5 +37,9 @@ let loadAccount (owner, accountId, transactions) =
     transactions
     |> List.sortBy (fun x -> x.Timestamp)
     |> List.fold (fun account txn ->
-        if txn.Operation = "withdraw" then account |> withdraw txn.Amount
-        else account |> deposit txn.Amount) openingAccount
+        let operation = tryParseSerializedOperation txn.Operation
+        match operation, account with
+        | Some Deposit, _ -> account |> deposit txn.Amount
+        | Some Withdraw, account -> account |> withdraw txn.Amount
+        | Some Exit, _ -> account
+        | None, _ -> account) openingAccount
